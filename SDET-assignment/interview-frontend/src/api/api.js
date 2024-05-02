@@ -45,7 +45,7 @@ export const getProcedures = async () => {
 };
 
 export const getPlanProcedures = async (planId) => {
-    const url = `${api_url}/PlanProcedure?$filter=planId eq ${planId}&$expand=procedure`;
+    const url = `${api_url}/PlanProcedure?$filter=planId eq ${planId}&$expand=procedure,planProcedureUsers`;
     const response = await fetch(url, {
         method: "GET",
     });
@@ -64,4 +64,25 @@ export const getUsers = async () => {
     if (!response.ok) throw new Error("Failed to get users");
 
     return await response.json();
+};
+
+export const assignUsersToPlanProcedure = async (planId, procedureId, UserIds) => {
+    const url = `${api_url}/PlanProcedure/AssignUsersToPlanProcedure`;
+    var command = { 
+        planId: planId, 
+        procedureId: procedureId,
+        UserIds: UserIds
+    };
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(command),
+    });
+
+    if (!response.ok) throw new Error("Failed to assign user(s) to the plan");
+
+    return true;
 };

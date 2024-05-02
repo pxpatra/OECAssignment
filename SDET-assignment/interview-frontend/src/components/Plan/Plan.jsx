@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   addProcedureToPlan,
+  assignUsersToPlanProcedure,
   getPlanProcedures,
   getProcedures,
   getUsers,
@@ -51,6 +52,10 @@ const Plan = () => {
     });
   };
 
+  const handleAssignUserToProcedure = async (planProcedure, userIds) => {
+    await assignUsersToPlanProcedure(id, planProcedure?.procedureId, userIds);
+  };
+
   return (
     <Layout>
       <div className="container pt-4">
@@ -82,7 +87,8 @@ const Plan = () => {
                       {planProcedures.map((p) => (
                         <PlanProcedureItem
                           key={p.procedure.procedureId}
-                          procedure={p.procedure}
+                          planProcedure={p}
+                          handleAssignUserToProcedure={handleAssignUserToProcedure}
                           users={users}
                         />
                       ))}

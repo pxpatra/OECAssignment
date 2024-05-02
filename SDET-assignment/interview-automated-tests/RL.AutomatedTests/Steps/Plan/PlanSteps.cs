@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using TechTalk.SpecFlow;
+ 
 
 namespace RL.AutomatedTests.Steps.Plan;
 
@@ -44,5 +45,40 @@ public class PlanSteps
         wait.Until(ExpectedConditions.UrlMatches(@"/plan/(\d+)"));
         Thread.Sleep(10000);
         driver.Url.Should().MatchRegex(@"/plan/(\d+)");
+    }
+
+    [Then("I'm adding procedure")]
+    public async Task AddProcedure()
+    {
+        var driver = _context.Get<IWebDriver>("driver");
+        driver.FindElement(By.XPath("//*[@id='root']/div/div/div[2]/div/div/div/div/div[1]/div/div[1]/div/input")).Click();
+        var wait = new WebDriverWait(driver, _waitDurration);
+        Thread.Sleep(10000);
+    }
+
+    [Then("I'm assigning user")]
+    public async Task AssignUser()
+    {
+        var driver = _context.Get<IWebDriver>("driver");
+        driver.FindElement(By.Id("react-select-3-input")).SendKeys("Nick Morrison");
+        driver.FindElement(By.Id("react-select-3-input")).SendKeys(Keys.Return);
+        Thread.Sleep(10000);
+    }
+
+    [Then("I'm refereshing the page")]
+    public async Task RefreshPage()
+    {
+        var driver = _context.Get<IWebDriver>("driver");
+        driver.Navigate().Refresh();
+        Thread.Sleep(10000);
+
+    }
+
+    [Then("I'm checking the user name")]
+    public async Task Checkusername()
+    {
+        var driver = _context.Get<IWebDriver>("driver");
+        String actualName = driver.FindElement(By.XPath("//*[@id='root']/div/div/div[2]/div/div/div/div/div[2]/div/div/div[2]/div/div[1]/div[1]/div[1]")).Text;
+        Assert.AreEqual("Nick Morrison", actualName, "Expected name is not observed");
     }
 }
